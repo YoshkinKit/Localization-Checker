@@ -1,0 +1,103 @@
+body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f5f5f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.drop-zone {
+    border: 2px dashed #ccc;
+    border-radius: 4px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+
+.drop-zone:hover {
+    border-color: #666;
+}
+
+.drop-zone__input {
+    display: none;
+}
+
+.results {
+    margin-top: 2rem;
+}
+
+.error-item {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-left: 4px solid #ff4444;
+    background: #fff5f5;
+}
+
+.issue-missing {
+    color: #d32f2f;
+    margin: 5px 0;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+}
+
+.issue-untranslated {
+    color: #9c27b0;
+    margin: 5px 0;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(156, 39, 176, 0.2);
+    font-weight: 500;
+}
+
+.issue-gpt {
+    color: #f57c00;
+    margin: 5px 0;
+}
+
+.issue-latin {
+    color: #0288d1;
+    margin: 5px 0;
+}
+
+.error-item {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-left: 4px solid #ff4444;
+    background: #fff5f5;
+    font-family: monospace;
+}
+
+.success-item {
+    padding: 1rem;
+    margin: 0.5rem 0;
+    border-left: 4px solid #4caf50;
+    background: #e8f5e9;
+    font-family: 'Montserrat', monospace;
+}
+
+.file-header {
+    font-weight: 600;
+    font-size: 1.1em;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.file-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.file-error {
+    background-color: #fff5f5;
+    color: #d32f2f;
+}
+
+.check-notice {
+    color: #666;
+    font-size: 0.9em;
+    font-style: italic;
+}
