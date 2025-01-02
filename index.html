@@ -11,6 +11,41 @@
 </head>
 <body>
     <div class="container">
+        <div class="help-section">
+            <h2>Типы ошибок:</h2>
+            <div class="error-examples">
+                <div class="error-type">
+                    <h3 class="issue-missing">Отсутствие перевода</h3>
+                    <p>Строка не переведена или содержит значения '#ERROR' или 'Loading...'</p>
+                    <div class="example">Пример: Missing translations: en, ja, zh</div>
+                </div>
+                
+                <div class="error-type">
+                    <h3 class="issue-untranslated">Непереведённые символы</h3>
+                    <p>Непереведённые одиночные латинские буквы</p>
+                    <div class="example">Пример: Untranslated characters found: I, a</div>
+                </div>
+
+                <div class="error-type">
+                    <h3 class="issue-gpt">GPT ответы</h3>
+                    <p>Ответы от GPT вместо перевода</p>
+                    <div class="example">Пример: The quoted text is empty</div>
+                </div>
+
+                <div class="error-type">
+                    <h3 class="issue-latin">Латиница в азиатских языках</h3>
+                    <p>Наличие латинских слов в ja, zh, ko переводах</p>
+                    <div class="example">Пример: Latin words found: test, hello</div>
+                </div>
+
+                <div class="error-type">
+                    <h3 class="issue-multiple">Множественный перевод</h3>
+                    <p>Несколько вариантов перевода в одной строке</p>
+                    <div class="example">Пример: "What kind is it?" or "Which one?"</div>
+                </div>
+
+            </div>
+        </div>
         <div class="drop-zone" id="dropZone">
             <div class="drop-zone__prompt">
                 Перетащите CSV файлы сюда или нажмите для выбора

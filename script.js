@@ -4,14 +4,7 @@ class LocalizationChecker {
     }
 
     checkMultipleTranslations(text) {
-        if (text.includes('"""')) {
-            const translations = text.match(/"""([^"""]+)"""/g);
-            if (translations) {
-                const uniqueTranslations = new Set(translations);
-                return translations.length > uniqueTranslations.size;
-            }
-        }
-        return false;
+        return text.match(/" or "/g);
     }
 
     checkGPTResponse(text) {
@@ -27,6 +20,8 @@ class LocalizationChecker {
             'there is nothing to translate',
             'depending on context',
             'the text between the quotes',
+            'this text contains explicit language',
+            'Note: '
         ];
 
         const lowerText = text.toLowerCase();
@@ -123,6 +118,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 reader.readAsText(file);
             }
+            else {
+                results.innerHTML = '';
+                alert('Пожалуйста, загрузите файлы в формате CSV');
+            }
         });
     }
 
@@ -175,14 +174,23 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                         }
 
-                        if (checker.checkGPTResponse(text)) {
+                        if (lang === 'en' && checker.checkGPTResponse(text)) {
                             issues.push({
                                 file: fileName,
                                 id: rowId,
-                                language: lang,
                                 issue: 'GPT response detected',
                                 text: text,
                                 type: 'gpt'
+                            });
+                        }
+
+                        if (lang === 'en' && checker.checkMultipleTranslations(text)) {
+                            issues.push({
+                                file: fileName,
+                                id: rowId,
+                                issue: 'Multiple translations detected',
+                                text: text,
+                                type: 'multiple'
                             });
                         }
 
@@ -273,6 +281,14 @@ document.addEventListener('DOMContentLoaded', () => {
                                         return `
                                             <div class="issue-${issue.type}">
                                                 ${issue.issue}<br>
+                                                <span class="check-notice">Please, check all languages for this id</span>
+                                            </div>`;
+                                    }
+                                    if (issue.type === 'gpt' || issue.type === 'multiple') {
+                                        return `
+                                            <div class="issue-${issue.type}">
+                                                ${issue.issue}<br>
+                                                Text: ${issue.text}<br>
                                                 <span class="check-notice">Please, check all languages for this id</span>
                                             </div>`;
                                     }

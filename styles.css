@@ -38,7 +38,7 @@ body {
 }
 
 .issue-missing {
-    color: #d32f2f;
+    color: #e53935;
     margin: 5px 0;
     padding: 5px 0;
     border-bottom: 1px solid rgba(211, 47, 47, 0.2);
@@ -49,7 +49,6 @@ body {
     margin: 5px 0;
     padding: 5px 0;
     border-bottom: 1px solid rgba(156, 39, 176, 0.2);
-    font-weight: 500;
 }
 
 .issue-gpt {
@@ -59,6 +58,11 @@ body {
 
 .issue-latin {
     color: #0288d1;
+    margin: 5px 0;
+}
+
+.issue-multiple {
+    color: deeppink;
     margin: 5px 0;
 }
 
@@ -100,4 +104,49 @@ body {
     color: #666;
     font-size: 0.9em;
     font-style: italic;
+}
+
+.help-section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.help-section h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.error-examples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.error-type {
+    padding: 1rem;
+    border-radius: 6px;
+    background: #f8f9fa;
+}
+
+.error-type h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.error-type p {
+    margin: 0.5rem 0;
+    color: #666;
+}
+
+.example {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: white;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.9rem;
 }
