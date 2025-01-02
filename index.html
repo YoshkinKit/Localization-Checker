@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -48,8 +49,8 @@
         </div>
         <div class="drop-zone" id="dropZone">
             <div class="drop-zone__prompt">
-                Перетащите CSV файлы сюда или нажмите для выбора
-                <input type="file" id="fileInput" multiple accept=".csv" class="drop-zone__input">
+                Перетащите CSV или XLSX файлы сюда или нажмите для выбора
+                <input type="file" id="fileInput" multiple accept=".csv,.xlsx" class="drop-zone__input">
             </div>
         </div>
         <div id="results" class="results"></div>

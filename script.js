@@ -105,24 +105,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
         files.forEach(file => {
             if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const content = e.target.result;
-                    processCSV(content, file.name, () => {
-                        processedFiles++;
-                        // Когда все файлы обработаны - показываем результаты
-                        if (processedFiles === files.length) {
-                            displayResults(allResults);
-                        }
-                    });
-                };
-                reader.readAsText(file);
+                processCsvFile(file, () => {
+                    processedFiles++;
+                    if (processedFiles === files.length) {
+                        displayResults(allResults);
+                    }
+                });
+            }
+            else if (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+                file.name.endsWith('.xlsx')) {
+                processXlsxFile(file, () => {
+                    processedFiles++;
+                    if (processedFiles === files.length) {
+                        displayResults(allResults);
+                    }
+                });
             }
             else {
                 results.innerHTML = '';
-                alert('Пожалуйста, загрузите файлы в формате CSV');
+                alert('Пожалуйста, загрузите файлы в формате CSV или XLSX');
             }
         });
+    }
+
+    function processCsvFile(file, callback) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const content = e.target.result;
+            processCSV(content, file.name, callback);
+        };
+        reader.readAsText(file);
+    }
+
+    function processXlsxFile(file, callback) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            
+            // Добавляем счетчик обработанных листов
+            let processedSheets = 0;
+            const totalSheets = workbook.SheetNames.length;
+            
+            // Обработка каждого листа
+            workbook.SheetNames.forEach(sheetName => {
+                const worksheet = workbook.Sheets[sheetName];
+                const csv = XLSX.utils.sheet_to_csv(worksheet);
+                
+                // Обработка каждого листа с отдельным callback
+                processCSV(csv, `${file.name} - ${sheetName}`, () => {
+                    processedSheets++;
+                    // Вызываем основной callback только после обработки всех листов
+                    if (processedSheets === totalSheets) {
+                        callback();
+                    }
+                });
+            });
+        };
+        reader.readAsArrayBuffer(file);
     }
 
     function processCSV(content, fileName, callback) {
