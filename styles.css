@@ -150,3 +150,9 @@ body {
     font-family: monospace;
     font-size: 0.9rem;
 }
+
+.issue-missing-id {
+    color: #c62828;
+    margin: 5px 0;
+    font-weight: 600;
+}

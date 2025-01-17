@@ -58,6 +58,10 @@ class LocalizationChecker {
         }
         return { found: false };
     }
+
+    checkMissingId(id) {
+        return !id || id.trim() === '' || id === '#';
+    }
 }
 
 // Инициализация обработчиков
@@ -177,75 +181,91 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 results.data.forEach((row, i) => {
                     const rowId = row[headers[0]]; // Первая колонка как ID
+                    const rowIndex = i + 2; // +2 because of header and 0-based index
                     let foundChars = new Set();
 
-                    headers.forEach((lang, index) => {
-                        if (index === 0) return; // Пропускаем колонку ID
-
-                        const text = row[lang] || '';
-                        lang = lang.trim();
-
-                        cyrillicLanguages.forEach(lang => {
-                            const text = row[lang] || '';
-                            const singleLatinCheck = checker.checkSingleLatinChars(text, lang);
-                            if (singleLatinCheck.found) {
-                                singleLatinCheck.chars.forEach(char => foundChars.add(char));
-                            }
+                    if (checker.checkMissingId(rowId) && !processedIds.has(rowIndex)) {
+                        processedIds.add(rowIndex);
+                        issues.push({
+                            file: fileName,
+                            id: `Row ${i + 2}`, // +2 because of header and 0-based index
+                            issue: 'Missing or invalid ID',
+                            type: 'missing-id',
+                            skipLanguage: true
                         });
 
-                        // Если найдены непереведенные символы, добавляем одну общую ошибку для строки
-                        if (foundChars.size > 0 && !processedIds.has(rowId)) {
-                            processedIds.add(rowId);
-                            issues.push({
-                                file: fileName,
-                                id: rowId,
-                                issue: `Untranslated characters found: ${Array.from(foundChars).join(', ')}`,
-                                type: 'untranslated'
-                            });
-                        }
+                        return;
+                    }
+                    
+                    if (!checker.checkMissingId(rowId)) {
+                        headers.forEach((lang, index) => {
+                            if (index === 0) return; // Пропускаем колонку ID
 
-                        if (checker.checkMissingTranslation(text)) {
-                            issues.push({
-                                file: fileName,
-                                id: rowId,
-                                language: lang,
-                                issue: 'Missing translation',
-                                type: 'missing'
-                            });
-                        }
+                            const text = row[lang] || '';
+                            lang = lang.trim();
 
-                        if (lang === 'en' && checker.checkGPTResponse(text)) {
-                            issues.push({
-                                file: fileName,
-                                id: rowId,
-                                issue: 'GPT response detected',
-                                text: text,
-                                type: 'gpt'
+                            cyrillicLanguages.forEach(lang => {
+                                const text = row[lang] || '';
+                                const singleLatinCheck = checker.checkSingleLatinChars(text, lang);
+                                if (singleLatinCheck.found) {
+                                    singleLatinCheck.chars.forEach(char => foundChars.add(char));
+                                }
                             });
-                        }
 
-                        if (lang === 'en' && checker.checkMultipleTranslations(text)) {
-                            issues.push({
-                                file: fileName,
-                                id: rowId,
-                                issue: 'Multiple translations detected',
-                                text: text,
-                                type: 'multiple'
-                            });
-                        }
+                            // Если найдены непереведенные символы, добавляем одну общую ошибку для строки
+                            if (foundChars.size > 0 && !processedIds.has(rowId)) {
+                                processedIds.add(rowId);
+                                issues.push({
+                                    file: fileName,
+                                    id: rowId,
+                                    issue: `Untranslated characters found: ${Array.from(foundChars).join(', ')}`,
+                                    type: 'untranslated'
+                                });
+                            }
 
-                        const asianCheck = checker.checkAsianLatin(text, lang);
-                        if (asianCheck.found) {
-                            issues.push({
-                                file: fileName,
-                                id: rowId,
-                                language: lang,
-                                issue: `Latin words found: ${asianCheck.words.join(', ')}`,
-                                text: text,
-                                type: 'latin'
-                            });
-                        }
-                    });
+                            if (checker.checkMissingTranslation(text)) {
+                                issues.push({
+                                    file: fileName,
+                                    id: rowId,
+                                    language: lang,
+                                    issue: 'Missing translation',
+                                    type: 'missing'
+                                });
+                            }
+
+                            if (lang === 'en' && checker.checkGPTResponse(text)) {
+                                issues.push({
+                                    file: fileName,
+                                    id: rowId,
+                                    issue: 'GPT response detected',
+                                    text: text,
+                                    type: 'gpt'
+                                });
+                            }
+
+                            if (lang === 'en' && checker.checkMultipleTranslations(text)) {
+                                issues.push({
+                                    file: fileName,
+                                    id: rowId,
+                                    issue: 'Multiple translations detected',
+                                    text: text,
+                                    type: 'multiple'
+                                });
+                            }
+
+                            const asianCheck = checker.checkAsianLatin(text, lang);
+                            if (asianCheck.found) {
+                                issues.push({
+                                    file: fileName,
+                                    id: rowId,
+                                    language: lang,
+                                    issue: `Latin words found: ${asianCheck.words.join(', ')}`,
+                                    text: text,
+                                    type: 'latin'
+                                });
+                            }
+                        });
+                    };
                 });
 
                 if (issues.length === 0) {
@@ -317,6 +337,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                     </div>` : ''
                                 }
                                     ${otherIssues.map(issue => {
+                                    if (issue.skipLanguage) {
+                                        return `
+                                            <div class="issue-${issue.type}">
+                                                ${issue.issue}
+                                            </div>`;
+                                    }
                                     if (issue.type === 'untranslated') {
                                         return `
                                             <div class="issue-${issue.type}">
