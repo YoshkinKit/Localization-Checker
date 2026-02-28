@@ -1,6 +1,41 @@
+/* ── CSS Custom Properties ── */
+:root {
+    --color-bg:             #f5f5f5;
+    --color-surface:        #fff;
+    --color-surface-alt:    #f8f9fa;
+    --color-text:           #333;
+    --color-text-muted:     #666;
+
+    --color-error:          #ff4444;
+    --color-error-bg:       #fff5f5;
+    --color-error-text:     #d32f2f;
+    --color-success:        #4caf50;
+    --color-success-bg:     #e8f5e9;
+    --color-success-text:   #2e7d32;
+
+    --color-missing:        #e53935;
+    --color-missing-id:     #c62828;
+    --color-untranslated:   #9c27b0;
+    --color-gpt:            #f57c00;
+    --color-latin:          #0288d1;
+    --color-multiple:       deeppink;
+    --color-missing-tilde:  #6a1b9a;
+    --color-missing-pipe:   #00695c;
+    --color-missing-tags:   #bf360c;
+    --color-unclosed-tags:  #4a148c;
+
+    --radius-sm:  4px;
+    --radius-md:  6px;
+    --radius-lg:  8px;
+
+    --font-main: 'Montserrat', sans-serif;
+    --font-mono: monospace;
+}
+
+/* ── Base ── */
 body {
-    font-family: 'Montserrat', sans-serif;
-    background: #f5f5f5;
+    font-family: var(--font-main);
+    background: var(--color-bg);
 }
 
 .container {
@@ -9,23 +44,26 @@ body {
     padding: 1rem;
 }
 
+/* ── Drop Zone ── */
 .drop-zone {
     border: 2px dashed #ccc;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     padding: 2rem;
     text-align: center;
     cursor: pointer;
-    transition: border 0.3s ease;
+    transition: border-color 0.3s ease;
 }
 
-.drop-zone:hover {
-    border-color: #666;
+.drop-zone:hover,
+.drop-zone--over {
+    border-color: var(--color-text-muted);
 }
 
 .drop-zone__input {
     display: none;
 }
 
+/* ── Results ── */
 .results {
     margin-top: 2rem;
 }
@@ -33,53 +71,17 @@ body {
 .error-item {
     padding: 1rem;
     margin: 0.5rem 0;
-    border-left: 4px solid #ff4444;
-    background: #fff5f5;
-}
-
-.issue-missing {
-    color: #e53935;
-    margin: 5px 0;
-    padding: 5px 0;
-    border-bottom: 1px solid rgba(211, 47, 47, 0.2);
-}
-
-.issue-untranslated {
-    color: #9c27b0;
-    margin: 5px 0;
-    padding: 5px 0;
-    border-bottom: 1px solid rgba(156, 39, 176, 0.2);
-}
-
-.issue-gpt {
-    color: #f57c00;
-    margin: 5px 0;
-}
-
-.issue-latin {
-    color: #0288d1;
-    margin: 5px 0;
-}
-
-.issue-multiple {
-    color: deeppink;
-    margin: 5px 0;
-}
-
-.error-item {
-    padding: 1rem;
-    margin: 0.5rem 0;
-    border-left: 4px solid #ff4444;
-    background: #fff5f5;
-    font-family: monospace;
+    border-left: 4px solid var(--color-error);
+    background: var(--color-error-bg);
+    font-family: var(--font-mono);
 }
 
 .success-item {
     padding: 1rem;
     margin: 0.5rem 0;
-    border-left: 4px solid #4caf50;
-    background: #e8f5e9;
-    font-family: 'Montserrat', monospace;
+    border-left: 4px solid var(--color-success);
+    background: var(--color-success-bg);
+    font-family: var(--font-main);
 }
 
 .file-header {
@@ -87,35 +89,144 @@ body {
     font-size: 1.1em;
     margin-bottom: 1rem;
     padding: 0.5rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
 }
 
 .file-success {
-    background-color: #e8f5e9;
-    color: #2e7d32;
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
 }
 
 .file-error {
-    background-color: #fff5f5;
-    color: #d32f2f;
+    background-color: var(--color-error-bg);
+    color: var(--color-error-text);
+}
+
+/* ── Issue Types ── */
+.issue-missing {
+    color: var(--color-missing);
+    margin: 5px 0;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(211, 47, 47, 0.2);
+}
+
+.issue-missing-id {
+    color: var(--color-missing-id);
+    margin: 5px 0;
+    font-weight: 600;
+}
+
+.issue-untranslated {
+    color: var(--color-untranslated);
+    margin: 5px 0;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(156, 39, 176, 0.2);
+}
+
+.issue-gpt {
+    color: var(--color-gpt);
+    margin: 5px 0;
+}
+
+.issue-latin {
+    color: var(--color-latin);
+    margin: 5px 0;
+}
+
+.issue-multiple {
+    color: var(--color-multiple);
+    margin: 5px 0;
+}
+
+.issue-missing-tilde {
+    color: var(--color-missing-tilde);
+    margin: 5px 0;
+    font-weight: 600;
+}
+
+.issue-empty-row {
+    color: var(--color-text-muted);
+    margin: 5px 0;
+    font-style: italic;
+}
+
+.issue-missing-pipe {
+    color: var(--color-missing-pipe);
+    margin: 5px 0;
+}
+
+.issue-missing-tags {
+    color: var(--color-missing-tags);
+    margin: 5px 0;
+}
+
+.issue-unclosed-tags {
+    color: var(--color-unclosed-tags);
+    margin: 5px 0;
 }
 
 .check-notice {
-    color: #666;
+    color: var(--color-text-muted);
     font-size: 0.9em;
     font-style: italic;
 }
 
+/* ── Help Section ── */
 .help-section {
     margin-bottom: 2rem;
     padding: 1rem;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Version Toggle ── */
+.version-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.version-toggle__label {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.version-toggle__options {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.version-btn {
+    padding: 0.5rem 1.25rem;
+    border: 2px solid #ccc;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    cursor: pointer;
+    font-family: var(--font-main);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.version-btn:hover {
+    border-color: var(--color-text-muted);
+}
+
+.version-btn--active {
+    border-color: #1976d2;
+    background: #e3f2fd;
+    color: #1976d2;
 }
 
 .help-section h2 {
-    color: #333;
+    color: var(--color-text);
     margin-bottom: 1.5rem;
 }
 
@@ -127,8 +238,8 @@ body {
 
 .error-type {
     padding: 1rem;
-    border-radius: 6px;
-    background: #f8f9fa;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-alt);
 }
 
 .error-type h3 {
@@ -139,20 +250,14 @@ body {
 
 .error-type p {
     margin: 0.5rem 0;
-    color: #666;
+    color: var(--color-text-muted);
 }
 
 .example {
     margin-top: 0.5rem;
     padding: 0.5rem;
-    background: white;
-    border-radius: 4px;
-    font-family: monospace;
+    background: var(--color-surface);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
     font-size: 0.9rem;
-}
-
-.issue-missing-id {
-    color: #c62828;
-    margin: 5px 0;
-    font-weight: 600;
 }

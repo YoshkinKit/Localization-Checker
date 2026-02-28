@@ -2,13 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Проверка локализации</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -38,8 +39,8 @@
                 </div>
 
                 <div class="error-type">
-                    <h3 class="issue-latin">Латиница в азиатских языках</h3>
-                    <p>Наличие латинских слов в ja, zh, ko переводах</p>
+                    <h3 class="issue-latin">Латиница в нелатинских языках</h3>
+                    <p>Наличие латинских слов в ja, zh, ko, th, el, bg, uk, ru переводах</p>
                     <div class="example">Пример: Latin words found: test, hello</div>
                 </div>
 
@@ -49,6 +50,37 @@
                     <div class="example">Пример: "What kind is it?" or "Which one?"</div>
                 </div>
 
+                <div class="error-type">
+                    <h3 class="issue-missing-tilde">Отсутствие ~ в ключе</h3>
+                    <p>Ключ перевода не начинается с символа ~</p>
+                    <div class="example">Пример: Key does not start with ~</div>
+                </div>
+
+                <div class="error-type" id="errorPipe">
+                    <h3 class="issue-missing-pipe">Отсутствие | в переводе</h3>
+                    <p>Перевод не содержит символ |, хотя он есть в ключе (v1.20)</p>
+                    <div class="example">Пример: Missing | separator in translation</div>
+                </div>
+
+                <div class="error-type">
+                    <h3 class="issue-missing-tags">Отсутствие тегов</h3>
+                    <p>Теги из оригинального текста отсутствуют в переводе</p>
+                    <div class="example">Пример: Missing tags: &lt;i&gt;, &lt;/i&gt;</div>
+                </div>
+
+                <div class="error-type">
+                    <h3 class="issue-unclosed-tags">Незакрытые теги</h3>
+                    <p>Открытые теги без закрывающего аналога (кроме &lt;br&gt;)</p>
+                    <div class="example">Пример: Unclosed tags: &lt;color&gt;, &lt;b&gt;</div>
+                </div>
+
+            </div>
+        </div>
+        <div class="version-toggle">
+            <span class="version-toggle__label">Версия Naninovel:</span>
+            <div class="version-toggle__options">
+                <button class="version-btn" data-version="1.19">1.19</button>
+                <button class="version-btn version-btn--active" data-version="1.20">1.20</button>
             </div>
         </div>
         <div class="drop-zone" id="dropZone">
@@ -59,6 +91,6 @@
         </div>
         <div id="results" class="results"></div>
     </div>
-    <script src="script.js"></script>
+    <script defer src="script.js"></script>
 </body>
 </html>
